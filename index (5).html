@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>For Layla ❤️</title>
+<style>
+/* ====== غيّر الصورة من هنا (حط الصورة في نفس الفولدر باسم photo1.jpg) ====== */
+:root{--photo:url("photo1.jpg")}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;font-family:-apple-system,"Segoe UI",Roboto,sans-serif;color:#fff;background:#1a0612;overflow:hidden}
+.screen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;padding:20px;text-align:center}
+.screen.on{display:flex}
+#s1,#s2{background:radial-gradient(circle at 30% 20%,#7a1f47,#1a0612 70%)}
+h1{font-size:1.7rem;margin-bottom:18px}
+input{width:min(280px,80vw);padding:14px;border-radius:14px;border:1px solid #ffffff55;background:#ffffff18;color:#fff;font-size:1.1rem;text-align:center;outline:none}
+.btn{margin-top:16px;padding:14px 28px;border:0;border-radius:30px;background:linear-gradient(135deg,#ff4d8d,#e0245e);color:#fff;font-size:1.05rem;font-weight:600;box-shadow:0 6px 20px #e0245e66;cursor:pointer}
+.btn:active{transform:scale(.96)}
+.err{color:#ff9bb8;height:20px;margin-top:10px;font-size:.9rem}
+.shake{animation:sh .4s}
+@keyframes sh{25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+/* player */
+.disc{width:150px;height:150px;border-radius:50%;background:conic-gradient(#ff4d8d,#7a1f47,#ff4d8d,#7a1f47,#ff4d8d);display:flex;align-items:center;justify-content:center;font-size:3rem;box-shadow:0 0 40px #ff4d8d88;animation:spin 6s linear infinite paused;margin-bottom:24px}
+.disc.play{animation-play-state:running}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* countdown + flower */
+#count{font-size:7rem;font-weight:800;color:#ff8fb4;text-shadow:0 0 30px #ff4d8d}
+.pop{animation:pop .9s}
+@keyframes pop{0%{transform:scale(.3);opacity:0}40%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:.9}}
+#flower{position:fixed;inset:0;z-index:20;background:#1a0612;display:none;align-items:center;justify-content:center}
+#flower.on{display:flex}
+.petals{position:relative;width:10px;height:10px}
+.petal{position:absolute;left:-30px;top:-110px;width:60px;height:110px;border-radius:50% 50% 50% 50%/70% 70% 30% 30%;background:linear-gradient(#ff9bb8,#e0245e);transform-origin:50% 100%;transform:rotate(var(--r)) scale(0);opacity:.92;transition:transform 1.4s cubic-bezier(.2,1.2,.3,1)}
+.petals.open .petal{transform:rotate(var(--r)) scale(1.8)}
+.core{position:absolute;left:-22px;top:-22px;width:44px;height:44px;border-radius:50%;background:#ffd36b;box-shadow:0 0 30px #ffd36b}
+/* main */
+#main{position:fixed;inset:0;display:none;clip-path:circle(0% at 50% 50%)}
+#main.show{display:block;animation:reveal 1.6s ease forwards}
+@keyframes reveal{to{clip-path:circle(150% at 50% 50%)}}
+#bg{position:absolute;inset:-30px;background:var(--photo) center/cover,linear-gradient(135deg,#b3345f,#3a0f2a);filter:blur(7px) brightness(.7)}
+#ui{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:10px}
+.glass{width:min(560px,94vw);max-height:68vh;overflow:auto;padding:22px;border-radius:24px;background:#ffffff22;border:1px solid #ffffff44;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);line-height:1.8;font-size:1.02rem;text-align:left;word-break:break-word;box-shadow:0 10px 40px #0006}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.hide{display:none!important}
+/* heart */
+#heart{position:fixed;inset:0;z-index:30;display:none;flex-direction:column;align-items:center;justify-content:center;background:#1a0612cc}
+#heart.on{display:flex}
+#heart .h{font-size:min(60vw,320px);line-height:1;animation:beat .8s infinite;filter:drop-shadow(0 0 30px #ff2b6a)}
+#heart p{font-size:2rem;font-weight:700;margin-top:-10px;text-shadow:0 0 14px #ff4d8d}
+@keyframes beat{50%{transform:scale(1.12)}}
+/* robot */
+#robot{display:flex;flex-direction:column;align-items:center;gap:10px;width:min(560px,94vw)}
+.rb{font-size:4.5rem;animation:float 2s infinite ease-in-out}
+@keyframes float{50%{transform:translateY(-8px)}}
+.bubble{background:#fff;color:#2a0d1b;padding:16px 20px;border-radius:20px;font-weight:600;line-height:1.7;text-align:center}
+</style>
+</head>
+<body>
+
+<!-- 1) Password -->
+<div id="s1" class="screen on">
+  <h1>🔒 Password</h1>
+  <input id="pw" type="password" placeholder="Enter password" autocomplete="off">
+  <div class="err" id="err"></div>
+  <button class="btn" onclick="checkPw()">Enter</button>
+</div>
+
+<!-- 2) Open the song -->
+<div id="s2" class="screen">
+  <div class="disc" id="disc">🎵</div>
+  <h1>For Layla ❤️</h1>
+  <button class="btn" onclick="openSong()">Open the song</button>
+</div>
+
+<!-- 3) Countdown -->
+<div id="s3" class="screen" style="background:#1a0612"><div id="count"></div></div>
+
+<!-- Flower -->
+<div id="flower">
+  <div class="petals" id="petals"><div class="core"></div></div>
+</div>
+
+<!-- 4) Main -->
+<div id="main">
+  <div id="bg"></div>
+  <div id="ui">
+
+    <div id="p1" class="glass">Layla.LAYLA enty ahla 7aga fe 7yaty w ana bahbkkkk gednn bgddd w msh 3awez asybk walahy dh msh kalam ana ba7lf ana bahbkk w msh 3awez asybk ana mbsot w ana m3aky bs el mshakl ely bena dh hya el mobozaha el mohm ana msh 3awzk tz3ly mny mn el kalam ely 2olto ana. Bs kont mday2 7223ya ana asffff msh asdy ana bs 7set b a7sas enk msh bt7byny 3shan bs msh b7sk 3awzany w el a7sasss dh 8aryb ay 7d mkany w 7as dh hy5af w hyday22 f aanaa 8lt lma 2olt el kalam dh msh el mafroud a2olo ana asffff ana msh bhb a3tzr lhd walahy bs ana bgd asfff 3shan enty z3lty w ana bgd msh h2olk kalam dh tany lw mday2 msh htklm walahy hskottt f 5alas b2aaa 722 3lyaa ana bahbkk 7aataaa😘😘😘😘❤️‍🩹 ana msh 3awez az3lk mny 5alasss b2a bsl7kkk ahoo 2olyyy enk msh z3lanaaaaa</div>
+    <button id="b1" class="btn" onclick="showHeart(step2)">msh z3lanaa</button>
+
+    <div id="p2" class="glass hide">W b3den 7our el lbs 🙂 walahy ana msh br5m ana bs el mayo kol dh 3shan el mayo bsss bssss el modo3 sahl walahy... ana msh htklm 5alas fe 7aga dlw ana bs bsl7kkkk w b2olk bahbk ya lilooo walahy w msh hz3lk mnk tany bs wenaby ana b7lfk b a8la 7aga 3andk lw ana 8aly 3andkk w lw bt7by gdetk ana b7lfk byhaa 3shan 5atry 7awly t7trmyny fe el hezar m3 ay 7d ana msh h2olk 7aga fe el 5roga 3shan mnz3lsh mn b3d bs 3shan 5atry 3shan 5atry a3tbryny eny bahbk w btlob mnk talb a7trmyny bsss hzary bs a7trmyny dh ely ana talbo ahhooo w ana asf 7 maraaaa aho tany 3ala ely ana 2olto ana asfff ana m2drshhhh eny ab3d 3nk enty a7la wahda fe el donya ya lilooo enty a8la 7aga 3andyyy 😘😘😘😘❤️‍🩹❤️‍🩹❤️‍🩹❤️‍🩹❤️‍🩹❤️‍🩹❤️‍🩹❤️‍🩹</div>
+
+    <div id="row2" class="row hide">
+      <button class="btn" onclick="showHeart()">bahbk</button>
+      <button class="btn" style="background:linear-gradient(135deg,#6c5b7b,#355c7d)" onclick="showRobot()">zalanaaa mnk lsa</button>
+    </div>
+
+    <div id="robot" class="hide">
+      <div class="rb">🤖</div>
+      <div class="bubble">m 5alas ya lilo allah el wad t3b 3shank dh katb lhd dlw 17000 alf code 3shank 5alas b2a</div>
+      <button class="btn" onclick="forgive()">5alas 7beto</button>
+    </div>
+
+    <button id="restart" class="btn hide" onclick="restart()">Start over ↺</button>
+  </div>
+</div>
+
+<!-- Heart -->
+<div id="heart"><div class="h">❤️</div><p>bahbkkk</p></div>
+
+<!-- ====== الأغنية: حط ملف الأغنية في نفس الفولدر باسم song.mp3 (أو غيّر الاسم هنا) ====== -->
+<audio id="song" src="song.mp3" loop preload="auto" playsinline></audio>
+
+<script>
+const $=id=>document.getElementById(id);
+const show=id=>{document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on')};
+
+// petals
+for(let i=0;i<10;i++){const p=document.createElement('div');p.className='petal';p.style.setProperty('--r',(i*36)+'deg');p.style.transitionDelay=(i*0.06)+'s';$('petals').prepend(p)}
+
+function checkPw(){
+  if($('pw').value.trim().toLowerCase()==='zain'){show('s2')}
+  else{$('err').textContent='Wrong password';$('pw').classList.add('shake');setTimeout(()=>$('pw').classList.remove('shake'),400)}
+}
+$('pw').addEventListener('keydown',e=>{if(e.key==='Enter')checkPw()});
+
+function openSong(){
+  $('song').play().catch(()=>{});
+  $('disc').classList.add('play');
+  show('s3');
+  let n=4;
+  const c=$('count');
+  const tick=()=>{
+    if(n===0){startFlower();return}
+    c.textContent=n;c.classList.remove('pop');void c.offsetWidth;c.classList.add('pop');n--;setTimeout(tick,1000)
+  };
+  tick();
+}
+
+function startFlower(){
+  $('s3').classList.remove('on');
+  $('flower').classList.add('on');
+  setTimeout(()=>$('petals').classList.add('open'),100);
+  setTimeout(()=>{$('main').classList.add('show')},1700);
+  setTimeout(()=>{$('flower').classList.remove('on')},3300);
+}
+
+function showHeart(cb){
+  $('heart').classList.add('on');
+  setTimeout(()=>{$('heart').classList.remove('on');if(cb)cb()},3000);
+}
+function step2(){
+  $('p1').classList.add('hide');$('b1').classList.add('hide');
+  $('p2').classList.remove('hide');$('row2').classList.remove('hide');
+}
+function showRobot(){
+  $('row2').classList.add('hide');$('robot').classList.remove('hide');
+}
+function forgive(){
+  $('robot').classList.add('hide');$('restart').classList.remove('hide');
+  showHeart();
+}
+function restart(){
+  ['p2','row2','robot','restart'].forEach(i=>$(i).classList.add('hide'));
+  $('p1').classList.remove('hide');$('b1').classList.remove('hide');
+}
+</script>
+</body>
+</html>
